@@ -21,3 +21,8 @@
 * In "Track group" dropdown choose "LPC Microconference"
 * In "Default session" dropdown choose the corresponding session
 * Click "Save"
+
+## Set Reviewing Permission
+* Go to abstract management (e.g. https://lpc.events/event/17/manage/abstracts/)
+* Click "Roles" in the "Reviewing" cell
+* Add relevant people as Reviewer and Convener for each track
