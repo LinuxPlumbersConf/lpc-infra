@@ -15,12 +15,19 @@
   - Select "Manage" and click "Save"
 
 ## Create Track
+
 * Go to tracks management (e.g https://lpc.events/event/17/manage/tracks/)
 * Click "Add Track"
 * In a dialog fill in the track (MC) name and optionally add a descrption
 * In "Track group" dropdown choose "LPC Microconference"
 * In "Default session" dropdown choose the corresponding session
 * Click "Save"
+
+## Adding new admins
+
+* First, the person needs to create a normal user
+* Promote them as admin in the admins panel (e.g. https://lpc.events/admin/admins)
+* Add them as reviewers in "All Tracks", as explained bellow at "Set Reviewing Permission"
 
 ## Set Reviewing Permission
 * Go to abstract management (e.g. https://lpc.events/event/17/manage/abstracts/)
