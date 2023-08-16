@@ -5,9 +5,9 @@
 
 # TODO:
 # * optimize modifications of ldap database and do it in one go
-# * record attendee type (speaker, modertor etc) in 'businessCategory'
 # * actually track record version in 'pager' field
 
+import argparse
 import sys
 import csv
 import ldap
@@ -103,6 +103,19 @@ def ldap_update(ldap_record):
     ldap_conn.modify(dn, mod)
 
 
+def ldap_update_field(email, field, value):
+    dn = 'cn=%s,%s' % (email, ldap_search_base)
+
+    old = ldap_lookup(email)
+    if not old:
+        print("%s not found" % email)
+        return
+
+    print("updating %s to %s" % (dn, value))
+    mod = [(ldap.MOD_REPLACE, field, value.encode("utf-8"))]
+    ldap_conn.modify(dn, mod)
+
+
 def csv_to_ldap(csv):
     display_name = "%s %s" % (csv['Name'], csv['Surname'])
     ldap_record = {
@@ -136,23 +149,59 @@ def read_csv(filename):
     return reg_list
 
 
-def usage(args):
-    print("Usage: %s <filename>" % args[0])
+def update_roles(emails, filename, field, value):
+    if not emails:
+        emails = []
+
+    if filename:
+        with open(filename, "r") as file:
+            emails += [x.strip() for x in file.readlines()]
+
+    for email in emails:
+        ldap_update_field(email, field, value)
+
+
+def process_csv(csv):
+    if not csv:
+        return
+
+    reg_list = read_csv(csv)
+    ldap_records = [csv_to_ldap(x) for x in reg_list]
+
+    for r in ldap_records:
+        ldap_update(r)
+
+
+def get_args(cmd):
+    p = argparse.ArgumentParser(cmd)
+    p.add_argument("-c", "--csv", help="cvent CSV file")
+    p.add_argument("-S", "--speakers-file", help="file with speaker emails")
+    p.add_argument("-s", "--speakers", action='append',
+                   help="coma separated speaker emails")
+    p.add_argument("-M", "--moderators-file",
+                   help="file with moderators emails")
+    p.add_argument("-m", "--moderators", action='append',
+                   help="coma separated moderator emails")
+
+    return vars(p.parse_args())
 
 
 def main(args):
-    if len(args) != 2:
-        usage(args)
-        sys.exit(1)
+    args = get_args(args[0])
+    print(args)
 
-    reg_list = read_csv(args[1])
-    ldap_records = [csv_to_ldap(x) for x in reg_list]
+    if not any(args.values()):
+        print("Nothing to do")
+        return
 
     passwd = getpass.getpass()
     ldap_connect(passwd)
 
-    for r in ldap_records:
-        ldap_update(r)
+    process_csv(args['csv'])
+    update_roles(args['speakers'], args['speakers_file'],
+                 'employeeType', 'Speaker')
+    update_roles(args['moderators'], args['moderators_file'],
+                 'businessCategory', 'moderator')
 
 
 if __name__ == '__main__':
