@@ -33,3 +33,10 @@
 * Go to abstract management (e.g. https://lpc.events/event/17/manage/abstracts/)
 * Click "Roles" in the "Reviewing" cell
 * Add relevant people as Reviewer and Convener for each track
+
+## Verify Permissions
+* Click on your name at top right corner to get a pop-down with options
+* Select "Login as"
+* In the "Select user" dialog search for the user to verify their permissions
+* Select the user and click "Confirm"
+* All Indico sessions in the browser will have that user permissions
