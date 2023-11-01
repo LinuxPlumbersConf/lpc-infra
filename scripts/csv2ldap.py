@@ -176,15 +176,19 @@ def process_csv(csv):
     ldap_records = [csv_to_ldap(x) for x in reg_list]
 
     for r in ldap_records:
-        ldap_update(r)
+        try:
+            ldap_update(r)
+        except:
+            print("Failed to process '%s'" % r['cn'], file=sys.stderr)
+
 
 
 def get_args(cmd):
     p = argparse.ArgumentParser(cmd)
     p.add_argument("-c", "--csv", help="cvent CSV file")
-    p.add_argument("-S", "--speakers-file", help="file with speaker emails")
-    p.add_argument("-s", "--speakers", action='append',
-                   help="coma separated speaker emails")
+    p.add_argument("-A", "--admins-file", help="file with admin emails")
+    p.add_argument("-a", "--admins", action='append',
+                   help="coma separated admin emails")
     p.add_argument("-M", "--moderators-file",
                    help="file with moderators emails")
     p.add_argument("-m", "--moderators", action='append',
@@ -205,8 +209,8 @@ def main(args):
     ldap_connect(passwd)
 
     process_csv(args['csv'])
-    update_roles(args['speakers'], args['speakers_file'],
-                 'employeeType', 'Speaker')
+    update_roles(args['admins'], args['admins_file'],
+                 'businessCategory', 'admin')
     update_roles(args['moderators'], args['moderators_file'],
                  'businessCategory', 'moderator')
 
