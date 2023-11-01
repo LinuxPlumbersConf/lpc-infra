@@ -5,7 +5,6 @@
 
 # TODO:
 # * optimize modifications of ldap database and do it in one go
-# * actually track record version in 'pager' field
 
 import argparse
 import sys
@@ -13,6 +12,7 @@ import csv
 import ldap
 import threading
 import getpass
+import datetime
 
 csv_fields = ['Name', 'Surname', 'Company', 'Title', 'Registration Type',
               'Last Registration Date (GMT)', 'Current Voucher Code',
@@ -118,6 +118,13 @@ def ldap_update_field(email, field, value):
 
 def csv_to_ldap(csv):
     display_name = "%s %s" % (csv['Name'], csv['Surname'])
+    reg_date = datetime.datetime.strptime(csv['Last Registration Date (GMT)'],
+                                          '%Y-%m-%dT%H:%M:%S.000Z')
+    pager = reg_date.strftime("%Y-%m-%d")
+    category = 'Attendee'
+    if 'speaker' in csv['Registration Type'].lower():
+        category = 'moderator'
+
     ldap_record = {
         'cn':                   csv['Email'],
         'givenName':            csv['Name'],
@@ -130,8 +137,8 @@ def csv_to_ldap(csv):
         'employeeType':         csv['Registration Type'],
         'displayName':          display_name,
         'initials':             display_name,
-        'pager':                '100000',     # FIXME: import version tracking
-        'businessCategory':     'Attendee',   # FIXME: speaker/moderator/etc
+        'pager':                pager,
+        'businessCategory':     category,
     }
 
     return ldap_record
