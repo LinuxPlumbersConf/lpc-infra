@@ -209,10 +209,10 @@ def main(args):
     ldap_connect(passwd)
 
     process_csv(args['csv'])
-    update_roles(args['admins'], args['admins_file'],
-                 'businessCategory', 'admin')
     update_roles(args['moderators'], args['moderators_file'],
                  'businessCategory', 'moderator')
+    update_roles(args['admins'], args['admins_file'],
+                 'businessCategory', 'admin')
 
 
 if __name__ == '__main__':
