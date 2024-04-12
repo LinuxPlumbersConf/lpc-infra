@@ -23,13 +23,13 @@
 * In "Default session" dropdown choose the corresponding session
 * Click "Save"
 
-## Adding new admins
+# Adding new admins
 
 * First, the person needs to create a normal user
 * Promote them as admin in the admins panel (e.g. https://lpc.events/admin/admins)
 * Add them as reviewers in "All Tracks", as explained bellow at "Set Reviewing Permission"
 
-## Set Reviewing Permission
+# Set Reviewing Permission
 * Go to abstract management (e.g. https://lpc.events/event/17/manage/abstracts/)
 * Click "Roles" in the "Reviewing" cell
 * Add relevant people as Reviewer and Convener for each track
