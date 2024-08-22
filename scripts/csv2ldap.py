@@ -14,10 +14,11 @@ import threading
 import getpass
 import datetime
 
-csv_fields = ['Name', 'Surname', 'Company', 'Title', 'Registration Type',
-              'Last Registration Date (GMT)', 'Current Voucher Code',
-              'Discount Code', 'Amount Paid', 'Confirmation Number',
-              'Email']
+csv_fields = [ 'Name', 'Surname', 'Email', 'Company',
+               'Title', 'Registration Type', 'Confirmation Number',
+               'Last Registration Date (GMT)',
+               'Discount Code', 'Current Voucher Code', 'Amount Paid']
+
 
 # 'cn' and 'objectClass' are treated separately
 ldap_fields = ['givenName', 'sn', 'title', 'organizationName',
@@ -119,7 +120,7 @@ def ldap_update_field(email, field, value):
 def csv_to_ldap(csv):
     display_name = "%s %s" % (csv['Name'], csv['Surname'])
     reg_date = datetime.datetime.strptime(csv['Last Registration Date (GMT)'],
-                                          '%Y-%m-%dT%H:%M:%S.000Z')
+                                          '%d/%m/%y %H:%M')
     pager = reg_date.strftime("%Y-%m-%d")
     category = 'Attendee'
     if 'speaker' in csv['Registration Type'].lower():
