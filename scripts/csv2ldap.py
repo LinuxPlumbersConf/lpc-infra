@@ -117,10 +117,19 @@ def ldap_update_field(email, field, value):
     ldap_conn.modify(dn, mod)
 
 
+def date_convert(csv_date):
+    try:
+        reg_date = datetime.datetime.strptime(csv_date,
+                                              '%Y-%m-%dT%H:%M:%S.000Z')
+    except:
+        reg_date = datetime.datetime.strptime(csv_date, '%d/%m/%y %H:%M')
+
+    return reg_date
+
+
 def csv_to_ldap(csv):
     display_name = "%s %s" % (csv['Name'], csv['Surname'])
-    reg_date = datetime.datetime.strptime(csv['Last Registration Date (GMT)'],
-                                          '%d/%m/%y %H:%M')
+    reg_date = date_convert(csv['Last Registration Date (GMT)'])
     pager = reg_date.strftime("%Y-%m-%d")
     category = 'Attendee'
     if 'speaker' in csv['Registration Type'].lower():
