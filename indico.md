@@ -41,7 +41,7 @@
 * Select the user and click "Confirm"
 * All Indico sessions in the browser will have that user permissions
 
-## Export abstracts
+# Export abstracts
 * Go to abstracts list (e.g. https://lpc.events/event/18/manage/abstracts/list)
 * Click "Customize list"
 * In the "Abstract list configuration" dialog select fields to present, they will be also exported to CSV/excel
